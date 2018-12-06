@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -713,6 +714,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
     }
 
 
+    @SuppressLint("StringFormatMatches")
     @Override
     public void progressUpdate(String currentFile, int progress, int total) {
         mAlertMsg = getString(R.string.fetching_file, currentFile, progress, total);

@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -55,6 +56,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
     private ImageView mImageView;
     private TextView mErrorTextView;
 
+    @SuppressLint("SetTextI18n")
     public DrawWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 

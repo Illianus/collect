@@ -73,8 +73,7 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
-                        questionWidget = new GeoPointWidget(context, fep);
-                        break;
+                        throw new RuntimeException("GeoPoints no longer supported");
                     case Constants.DATATYPE_BARCODE:
                         questionWidget = new BarcodeWidget(context, fep);
                         break;

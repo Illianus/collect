@@ -18,8 +18,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
-import au.com.bytecode.opencsv.CSVReader;
-import org.apache.commons.io.IOUtils;
+
+import com.opencsv.CSVReader;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.InstanceInitializationFactory;
@@ -39,7 +40,12 @@ import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
-import org.odk.collect.android.external.*;
+import org.odk.collect.android.external.ExternalAnswerResolver;
+import org.odk.collect.android.external.ExternalDataHandler;
+import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.external.ExternalDataManagerImpl;
+import org.odk.collect.android.external.ExternalDataReader;
+import org.odk.collect.android.external.ExternalDataReaderImpl;
 import org.odk.collect.android.external.handler.ExternalDataHandlerPull;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
@@ -48,7 +54,15 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ZipUtils;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -146,7 +160,12 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 mErrorMsg = e.getMessage();
                 e.printStackTrace();
             } finally {
-                IOUtils.closeQuietly(fis);
+                if(fis!=null)
+                    try {
+                        fis.close();
+                    }catch (IOException x) {
+                        //ignore
+                    }
             }
         }
 

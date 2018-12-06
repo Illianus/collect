@@ -21,7 +21,9 @@ package org.odk.collect.android.external;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import au.com.bytecode.opencsv.CSVReader;
+
+import com.opencsv.CSVReader;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;

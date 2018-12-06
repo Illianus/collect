@@ -19,7 +19,6 @@
 package org.odk.collect.android.utilities;
 
 import android.util.Log;
-import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

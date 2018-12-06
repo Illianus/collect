@@ -781,7 +781,6 @@ public class FormController {
     /**
      * Creates a new repeated instance of the group referenced by the current FormIndex.
      *
-     * @param questionIndex
      */
     public void newRepeat() {
         mFormEntryController.newRepeat();

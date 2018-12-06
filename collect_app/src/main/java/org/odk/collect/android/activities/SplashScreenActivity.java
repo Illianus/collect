@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -27,6 +28,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -44,21 +47,47 @@ public class SplashScreenActivity extends Activity {
 
     private static final int mSplashTimeout = 2000; // milliseconds
     private static final boolean EXIT = true;
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 1;
 
     private int mImageMaxWidth;
     private AlertDialog mAlertDialog;
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if(requestCode==MY_PERMISSIONS_REQUEST_WRITE_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                try {
+                    Collect.createODKDirs();
+                } catch (RuntimeException e) {
+                    createErrorDialog(e.getMessage(), EXIT);
+                }
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
+            }
+        }else{
+            super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // must be at the beginning of any activity that can be called from an external intent
-        try {
-            Collect.createODKDirs();
-        } catch (RuntimeException e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
+        }else {
+
+            // must be at the beginning of any activity that can be called from an external intent
+            try {
+                Collect.createODKDirs();
+            } catch (RuntimeException e) {
+                createErrorDialog(e.getMessage(), EXIT);
+                return;
+            }
         }
 
         mImageMaxWidth = getWindowManager().getDefaultDisplay().getWidth();

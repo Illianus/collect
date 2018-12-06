@@ -14,10 +14,10 @@
 
 package org.odk.collect.android.utilities;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-import org.apache.commons.io.IOUtils;
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
@@ -117,6 +117,7 @@ public class FileUtils {
     }
 
 
+    @SuppressLint("LongLogTag")
     public static String getMd5Hash(File file) {
         try {
             // CTS (6/15/2010) : stream file through digest instead of handing it the byte[]
@@ -376,6 +377,7 @@ public class FileUtils {
     /**
      * @param mediaDir the media folder
      */
+    @SuppressLint("StringFormatInvalid")
     public static void checkMediaPath(File mediaDir) {
         if (mediaDir.exists() && mediaDir.isFile()) {
             Log.e(t, "The media folder is already there and it is a FILE!! We will need to delete it and create a folder instead");
@@ -411,7 +413,7 @@ public class FileUtils {
             deleteAndReport(tempMediaFolder);
         } else {
             for (File mediaFile : mediaFiles) {
-                org.apache.commons.io.FileUtils.moveFileToDirectory(mediaFile, formMediaPath, true);
+                IOUtils.moveFileToDirectory(mediaFile, formMediaPath, true);
             }
             deleteAndReport(tempMediaFolder);
         }

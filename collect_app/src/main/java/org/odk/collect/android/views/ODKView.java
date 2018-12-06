@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.views;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -115,6 +116,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 mLaunchIntentButton.setLayoutParams(params);
 
                 mLaunchIntentButton.setOnClickListener(new View.OnClickListener() {
+                    @SuppressLint("LongLogTag")
                     @Override
                     public void onClick(View v) {
                         String intentName = ExternalAppsUtils.extractIntentName(intentString);

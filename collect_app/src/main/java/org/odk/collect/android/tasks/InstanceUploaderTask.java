@@ -22,6 +22,21 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+
+import com.belladati.httpclientandroidlib.Header;
+import com.belladati.httpclientandroidlib.HttpResponse;
+import com.belladati.httpclientandroidlib.HttpStatus;
+import com.belladati.httpclientandroidlib.client.ClientProtocolException;
+import com.belladati.httpclientandroidlib.client.HttpClient;
+import com.belladati.httpclientandroidlib.client.methods.HttpHead;
+import com.belladati.httpclientandroidlib.client.methods.HttpPost;
+import com.belladati.httpclientandroidlib.conn.ConnectTimeoutException;
+import com.belladati.httpclientandroidlib.conn.HttpHostConnectException;
+import com.belladati.httpclientandroidlib.entity.mime.MultipartEntityBuilder;
+import com.belladati.httpclientandroidlib.entity.mime.content.FileBody;
+import com.belladati.httpclientandroidlib.entity.mime.content.StringBody;
+import com.belladati.httpclientandroidlib.protocol.HttpContext;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -30,27 +45,23 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.WebUtils;
-import org.opendatakit.httpclientandroidlib.Header;
-import org.opendatakit.httpclientandroidlib.HttpResponse;
-import org.opendatakit.httpclientandroidlib.HttpStatus;
-import org.opendatakit.httpclientandroidlib.client.ClientProtocolException;
-import org.opendatakit.httpclientandroidlib.client.HttpClient;
-import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
-import org.opendatakit.httpclientandroidlib.client.methods.HttpPost;
-import org.opendatakit.httpclientandroidlib.conn.ConnectTimeoutException;
-import org.opendatakit.httpclientandroidlib.conn.HttpHostConnectException;
-import org.opendatakit.httpclientandroidlib.entity.mime.MultipartEntity;
-import org.opendatakit.httpclientandroidlib.entity.mime.content.FileBody;
-import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Background task for uploading completed forms.
@@ -84,7 +95,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
      * @param id
      * @param instanceFilePath
      * @param toUpdate         - Instance URL for recording status update.
-     * @param httpclient       - client connection
      * @param localContext     - context (e.g., credentials, cookies) for client connection
      * @param uriRemap         - mapping of Uris to avoid redirects on subsequent invocations
      * @return false if credentials are required and we should terminate immediately.
@@ -335,7 +345,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             long byteCount = 0L;
 
             // mime post
-            MultipartEntity entity = new MultipartEntity();
+            MultipartEntityBuilder entity = MultipartEntityBuilder.create();
 
             // add the submission file first...
             FileBody fb = new FileBody(submissionFile, "text/xml");
@@ -425,7 +435,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 }
             }
 
-            httppost.setEntity(entity);
+            httppost.setEntity(entity.build());
 
             // prepare response and return uploaded
             HttpResponse response = null;

@@ -23,11 +23,11 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DriveListItem;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -67,7 +67,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
             if (o.getDate() != null) {
                 dateModified = new SimpleDateFormat(getContext().getString(
                         R.string.modified_on_date_at_time), Locale.getDefault())
-                        .format(new Date(o.getDate().getValue()));
+                        .format(o.getDate());
             }
 
 

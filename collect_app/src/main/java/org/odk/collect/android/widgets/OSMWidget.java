@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import org.apache.http.protocol.HTTP;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -30,6 +29,8 @@ import org.odk.collect.android.logic.FormController;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.msebera.android.httpclient.protocol.HTTP;
 
 /**
  * Widget that allows the user to launch OpenMapKit to get an OSM Feature with a

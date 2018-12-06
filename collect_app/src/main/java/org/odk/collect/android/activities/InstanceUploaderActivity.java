@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -69,6 +70,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     private HashMap<String, String> mUploadedInstances;
     private String mUrl;
 
+    @SuppressLint("LongLogTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,6 +141,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         Collect.getInstance().getActivityLogger().logOnStart(this);
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     protected void onResume() {
         Log.i(t, "onResume: Resuming upload of " + mInstancesToSend.length + " instances!");
@@ -172,6 +175,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         return mInstanceUploaderTask;
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     protected void onPause() {
         Log.i(t, "onPause: Pausing upload of " + mInstancesToSend.length + " instances!");
@@ -196,6 +200,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         super.onDestroy();
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
         Log.i(t, "uploadingComplete: Processing results (" + result.size() + ") from upload of " + mInstancesToSend.length + " instances!");
@@ -249,6 +254,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     }
 
 
+    @SuppressLint("StringFormatMatches")
     @Override
     public void progressUpdate(int progress, int total) {
         mAlertMsg = getString(R.string.sending_items, progress, total);
@@ -256,6 +262,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     }
 
 
+    @SuppressLint("LongLogTag")
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
@@ -355,6 +362,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     }
 
 
+    @SuppressLint("LongLogTag")
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         if (mProgressDialog.isShowing()) {

@@ -14,9 +14,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
-import com.google.android.gms.auth.UserRecoverableAuthException;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
@@ -24,11 +22,9 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.utilities.WebUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -39,8 +35,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
     public static boolean running = false;
     InstanceUploaderTask mInstanceUploaderTask;
-
-    GoogleSheetsAutoUploadTask mGoogleSheetsUploadTask;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -132,18 +126,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     context.getString(R.string.protocol_odk_default));
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-                mGoogleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context);
-                String googleUsername = settings.getString(
-                        PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
-                if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
-                    // just quit if there's no username
-                    running = false;
-                    return;
-                }
-                mGoogleSheetsUploadTask.setUserName(googleUsername);
-                mGoogleSheetsUploadTask.setUploaderListener(this);
-                mGoogleSheetsUploadTask.execute(toSendArray);
-
+                throw new RuntimeException("Google sheets is not supported!");
             } else {
                 // get the username, password, and server from preferences
 
@@ -171,9 +154,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         // task is done
         if (mInstanceUploaderTask != null) {
             mInstanceUploaderTask.setUploaderListener(null);
-        }
-        if (mGoogleSheetsUploadTask != null) {
-            mGoogleSheetsUploadTask.setUploaderListener(null);
         }
         running = false;
 
@@ -260,66 +240,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (mInstanceUploaderTask != null) {
             mInstanceUploaderTask.setUploaderListener(null);
         }
-        if (mGoogleSheetsUploadTask != null) {
-            mGoogleSheetsUploadTask.setUploaderListener(null);
-        }
         running = false;
-    }
-
-    private class GoogleSheetsAutoUploadTask extends
-            GoogleSheetsAbstractUploader<Long, Integer, HashMap<String, String>> {
-
-        private Context mContext;
-
-        public GoogleSheetsAutoUploadTask(Context c) {
-            mContext = c;
-        }
-
-        @Override
-        protected HashMap<String, String> doInBackground(Long... values) {
-
-            mResults = new HashMap<String, String>();
-
-            String selection = InstanceColumns._ID + "=?";
-            String[] selectionArgs = new String[(values == null) ? 0 : values.length];
-            if (values != null) {
-                for (int i = 0; i < values.length; i++) {
-                    if (i != values.length - 1) {
-                        selection += " or " + InstanceColumns._ID + "=?";
-                    }
-                    selectionArgs[i] = values[i].toString();
-                }
-            }
-
-            String token = null;
-            try {
-                token = authenticate(mContext, mGoogleUserName);
-            } catch (IOException e) {
-                // network or server error, the call is expected to succeed if
-                // you try again later. Don't attempt to call again immediately
-                // - the request is likely to fail, you'll hit quotas or
-                // back-off.
-                return null;
-            } catch (GooglePlayServicesAvailabilityException playEx) {
-                return null;
-            } catch (UserRecoverableAuthException e) {
-                e.printStackTrace();
-                return null;
-            } catch (GoogleAuthException e) {
-                // Failure. The call is not expected to ever succeed so it
-                // should not be retried.
-                return null;
-            }
-            mContext = null;
-
-            if (token == null) {
-                // failed, so just return
-                return null;
-            }
-
-            uploadInstances(selection, selectionArgs, token);
-            return mResults;
-        }
     }
 
 }

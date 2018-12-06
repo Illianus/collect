@@ -40,7 +40,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.utilities.CompatibilityUtils;
 
 import java.util.ArrayList;
@@ -107,7 +106,7 @@ public class InstanceUploaderList extends ListActivity implements
 
         // set up long click listener
 
-        mUploadButton = (Button) findViewById(R.id.upload_button);
+        mUploadButton = findViewById(R.id.upload_button);
         mUploadButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -115,12 +114,7 @@ public class InstanceUploaderList extends ListActivity implements
                 ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-                if (NetworkReceiver.running == true) {
-                    Toast.makeText(
-                            InstanceUploaderList.this,
-                            R.string.send_in_progress,
-                            Toast.LENGTH_SHORT).show();
-                } else if (ni == null || !ni.isConnected()) {
+                if (ni == null || !ni.isConnected()) {
                     Collect.getInstance().getActivityLogger()
                             .logAction(this, "uploadButton", "noConnection");
 
@@ -149,7 +143,7 @@ public class InstanceUploaderList extends ListActivity implements
             }
         });
 
-        mToggleButton = (Button) findViewById(R.id.toggle_button);
+        mToggleButton = findViewById(R.id.toggle_button);
         mToggleButton.setLongClickable(true);
         mToggleButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -235,18 +229,7 @@ public class InstanceUploaderList extends ListActivity implements
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String server = prefs.getString(PreferencesActivity.KEY_PROTOCOL, null);
         if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-            // if it's Sheets, start the Sheets uploader
-            // first make sure we have a google account selected
-
-            String googleUsername = prefs.getString(
-                    PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
-            if (googleUsername == null || googleUsername.equals("")) {
-                showDialog(GOOGLE_USER_DIALOG);
-                return;
-            }
-            Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
-            i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIDs);
-            startActivityForResult(i, INSTANCE_UPLOADER);
+            throw new RuntimeException("Cannot upload sheets any more!");
         } else {
             // otherwise, do the normal agregate/other thing.
             Intent i = new Intent(this, InstanceUploaderActivity.class);

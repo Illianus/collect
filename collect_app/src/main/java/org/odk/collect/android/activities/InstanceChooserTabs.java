@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.annotation.SuppressLint;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -36,6 +37,7 @@ public class InstanceChooserTabs extends TabActivity {
     private int mSavedCount;
     private int mCompletedCount;
 
+    @SuppressLint("StringFormatMatches")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

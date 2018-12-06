@@ -20,6 +20,14 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+
+import com.belladati.httpclientandroidlib.client.CookieStore;
+import com.belladati.httpclientandroidlib.client.CredentialsProvider;
+import com.belladati.httpclientandroidlib.client.protocol.ClientContext;
+import com.belladati.httpclientandroidlib.impl.client.BasicCookieStore;
+import com.belladati.httpclientandroidlib.protocol.BasicHttpContext;
+import com.belladati.httpclientandroidlib.protocol.HttpContext;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
@@ -27,12 +35,6 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
-import org.opendatakit.httpclientandroidlib.client.CookieStore;
-import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
-import org.opendatakit.httpclientandroidlib.client.protocol.ClientContext;
-import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
-import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
 
@@ -60,7 +62,7 @@ public class Collect extends Application {
     // share all session cookies across all sessions...
     private CookieStore cookieStore = new BasicCookieStore();
     // retain credentials for 7 minutes...
-    private CredentialsProvider credsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
+    private AgingCredentialsProvider credsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
     private ActivityLogger mActivityLogger;
     private FormController mFormController = null;
     private ExternalDataManager externalDataManager;
@@ -191,7 +193,7 @@ public class Collect extends Application {
     }
 
     public CredentialsProvider getCredentialsProvider() {
-        return credsProvider;
+        return (CredentialsProvider) credsProvider;
     }
 
     public CookieStore getCookieStore() {
@@ -201,19 +203,6 @@ public class Collect extends Application {
     @Override
     public void onCreate() {
         singleton = this;
-
-        // // set up logging defaults for apache http component stack
-        // Log log;
-        // log = LogFactory.getLog("org.opendatakit.httpclientandroidlib");
-        // log.enableError(true);
-        // log.enableWarn(true);
-        // log.enableInfo(true);
-        // log.enableDebug(true);
-        // log = LogFactory.getLog("org.opendatakit.httpclientandroidlib.wire");
-        // log.enableError(true);
-        // log.enableWarn(false);
-        // log.enableInfo(false);
-        // log.enableDebug(false);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         super.onCreate();

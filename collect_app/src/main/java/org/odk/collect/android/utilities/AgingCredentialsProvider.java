@@ -39,10 +39,10 @@
 
 package org.odk.collect.android.utilities;
 
-import org.opendatakit.httpclientandroidlib.annotation.ThreadSafe;
-import org.opendatakit.httpclientandroidlib.auth.AuthScope;
-import org.opendatakit.httpclientandroidlib.auth.Credentials;
-import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
+import com.belladati.httpclientandroidlib.annotation.ThreadSafe;
+import com.belladati.httpclientandroidlib.auth.AuthScope;
+import com.belladati.httpclientandroidlib.auth.Credentials;
+import com.belladati.httpclientandroidlib.client.CredentialsProvider;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

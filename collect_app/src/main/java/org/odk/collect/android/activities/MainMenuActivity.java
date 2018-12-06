@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -192,8 +193,7 @@ public class MainMenuActivity extends Activity {
                         PreferencesActivity.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
                 Intent i = null;
                 if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-                    i = new Intent(getApplicationContext(),
-                            GoogleDriveActivity.class);
+                    throw new RuntimeException("Google sheets no longer supported!");
                 } else {
                     i = new Intent(getApplicationContext(),
                             FormDownloadList.class);
@@ -461,6 +461,7 @@ public class MainMenuActivity extends Activity {
         return null;
     }
 
+    @SuppressLint({"StringFormatInvalid", "StringFormatMatches"})
     private void updateButtons() {
         if (mFinalizedCursor != null && !mFinalizedCursor.isClosed()) {
             mFinalizedCursor.requery();

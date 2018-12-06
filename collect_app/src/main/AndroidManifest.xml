@@ -9,9 +9,8 @@
 	the specific language governing permissions and limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.odk.collect.android"
-          android:versionCode="1058"
-          android:versionName="1.4.8">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.odk.collect.android">
 
     <uses-feature
             android:name="android.hardware.location"
@@ -54,9 +53,7 @@
     <uses-permission android:name="org.odk.collect.android.permission.MAPS_RECEIVE"/>
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
 
-    <uses-sdk
-            android:minSdkVersion="13"
-            android:targetSdkVersion="13"/>
+    <uses-sdk />
 
     <supports-screens
             android:anyDensity="true"
@@ -94,7 +91,7 @@
                 android:configChanges="orientation"
                 android:label="@string/app_name"
                 android:windowSoftInputMode="adjustResize">
-            <intent-filter>
+            <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW"/>
                 <action android:name="android.intent.action.EDIT"/>
 
@@ -115,22 +112,8 @@
                 android:name=".activities.DrawActivity"
                 android:label="@string/app_name"/>
         <activity
-                android:name=".activities.GoogleDriveActivity"
-                android:label="@string/app_name"
-                android:windowSoftInputMode="stateHidden"
-                />
-        <activity
                 android:name=".activities.InstanceChooserList"
                 android:label="@string/app_name"/>
-
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW"/>
-            <action android:name="android.intent.action.EDIT"/>
-
-            <category android:name="android.intent.category.DEFAULT"/>
-
-            <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance"/>
-        </intent-filter>
 
         <activity
                 android:name=".activities.InstanceChooserTabs"
@@ -138,7 +121,7 @@
         <activity
                 android:name=".activities.FormChooserList"
                 android:label="@string/app_name">
-            <intent-filter>
+            <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW"/>
                 <action android:name="android.intent.action.EDIT"/>
                 <action android:name="android.intent.action.PICK"/>
@@ -159,9 +142,6 @@
                 android:label="@string/app_name"/>
         <activity
                 android:name=".activities.FileManagerTabs"
-                android:label="@string/app_name"/>
-        <activity
-                android:name=".activities.GoogleSheetsUploaderActivity"
                 android:label="@string/app_name"/>
         <activity
                 android:name=".activities.InstanceUploaderList"
@@ -195,15 +175,6 @@
                 android:name=".activities.FormHierarchyActivity"
                 android:label="@string/app_name"/>
         <activity
-                android:name=".activities.GeoPointActivity"
-                android:label="@string/app_name"/>
-        <activity
-                android:name=".activities.GeoPointMapActivity"
-                android:label="@string/app_name"/>
-        <activity
-                android:name=".activities.GeoPointMapNotDraggableActivity"
-                android:label="@string/app_name"/>
-        <activity
                 android:name=".activities.BearingActivity"
                 android:label="@string/app_name"/>
         <activity
@@ -232,7 +203,8 @@
                 android:name=".receivers.NetworkReceiver"
                 android:enabled="true">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
             </intent-filter>
             <intent-filter>
                 <action android:name="org.odk.collect.android.FormSaved"/>

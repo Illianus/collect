@@ -14,11 +14,21 @@
 
 package org.odk.collect.android.tasks;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.belladati.httpclientandroidlib.Header;
+import com.belladati.httpclientandroidlib.HttpEntity;
+import com.belladati.httpclientandroidlib.HttpResponse;
+import com.belladati.httpclientandroidlib.HttpStatus;
+import com.belladati.httpclientandroidlib.client.HttpClient;
+import com.belladati.httpclientandroidlib.client.methods.HttpGet;
+import com.belladati.httpclientandroidlib.protocol.HttpContext;
+
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
@@ -30,15 +40,12 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebUtils;
-import org.opendatakit.httpclientandroidlib.Header;
-import org.opendatakit.httpclientandroidlib.HttpEntity;
-import org.opendatakit.httpclientandroidlib.HttpResponse;
-import org.opendatakit.httpclientandroidlib.HttpStatus;
-import org.opendatakit.httpclientandroidlib.client.HttpClient;
-import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -407,7 +414,7 @@ public class DownloadFormsTask extends
                         // clear the cookies -- should not be necessary?
                         Collect.getInstance().getCookieStore().clear();
                     }
-                    String errMsg =
+                    @SuppressLint("StringFormatMatches") String errMsg =
                             Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
                                     response.getStatusLine().getReasonPhrase(), statusCode);
                     Log.e(t, errMsg);
@@ -488,6 +495,7 @@ public class DownloadFormsTask extends
         }
     }
 
+    @SuppressLint({"StringFormatInvalid", "StringFormatMatches"})
     private String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath, FormDetails fd, int count,
                                                  int total) throws Exception {
         if (fd.manifestUrl == null)

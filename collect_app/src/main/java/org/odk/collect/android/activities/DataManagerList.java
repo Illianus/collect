@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -182,6 +183,7 @@ public class DataManagerList extends ListActivity implements
     /**
      * Create the instance delete dialog
      */
+    @SuppressLint("StringFormatMatches")
     private void createDeleteInstancesDialog() {
         Collect.getInstance().getActivityLogger().logAction(this, "createDeleteInstancesDialog", "show");
 

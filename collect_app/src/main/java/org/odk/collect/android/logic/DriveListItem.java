@@ -17,7 +17,8 @@ package org.odk.collect.android.logic;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.google.api.client.util.DateTime;
+
+import java.util.Date;
 
 public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
     public static final int FILE = 1;
@@ -41,10 +42,10 @@ public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
     private String image;
     private String driveId;
     private String parentId;
-    private DateTime date;
+    private Date date;
     private int type;
 
-    public DriveListItem(String n, String d, DateTime dt, String p, String img, int type, String driveId, String parentId) {
+    public DriveListItem(String n, String d, Date dt, String p, String img, int type, String driveId, String parentId) {
         name = n;
         data = d;
         date = dt;
@@ -62,7 +63,7 @@ public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
         image = pc.readString();
         driveId = pc.readString();
         parentId = pc.readString();
-        date = new DateTime(pc.readLong());
+        this.date = new Date(pc.readLong());
         type = pc.readInt();
     }
 
@@ -74,7 +75,7 @@ public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
         return data;
     }
 
-    public DateTime getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -120,7 +121,7 @@ public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
         dest.writeString(this.driveId);
         dest.writeString(this.parentId);
 
-        dest.writeLong(date.getValue());
+        dest.writeLong(date.getTime());
         dest.writeInt(this.type);
     }
 }

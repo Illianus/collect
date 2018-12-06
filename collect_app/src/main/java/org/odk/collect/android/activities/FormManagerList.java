@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -24,6 +25,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteFormsListener;
@@ -206,12 +208,12 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
     /**
      * Create the form delete dialog
      */
+    @SuppressLint("StringFormatMatches")
     private void createDeleteFormsDialog() {
         Collect.getInstance().getActivityLogger().logAction(this, "createDeleteFormsDialog", "show");
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setTitle(getString(R.string.delete_file));
-        mAlertDialog.setMessage(getString(R.string.delete_confirm,
-                mSelected.size()));
+        mAlertDialog.setMessage(getString(R.string.delete_confirm, mSelected.size()));
         DialogInterface.OnClickListener dialogYesNoListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -280,6 +282,7 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
         tv.setText(result);
     }
 
+    @SuppressLint("StringFormatMatches")
     @Override
     public void deleteComplete(int deletedForms) {
         Log.i(t, "Delete forms complete");
@@ -315,6 +318,5 @@ public class FormManagerList extends ListActivity implements DiskSyncListener,
         BackgroundTasks() {
         }
 
-        ;
     }
 }

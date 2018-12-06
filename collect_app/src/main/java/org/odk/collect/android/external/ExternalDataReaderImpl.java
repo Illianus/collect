@@ -20,8 +20,8 @@ package org.odk.collect.android.external;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.utilities.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,7 +71,7 @@ public class ExternalDataReaderImpl implements ExternalDataReader {
 
                     // the physically delete the db.
                     try {
-                        FileUtils.forceDelete(dbFile);
+                        IOUtils.forceDelete(dbFile);
                         Log.w(ExternalDataUtil.LOGGER_NAME, "Deleted " + dbFile.getName());
                     } catch (IOException e) {
                         Log.e(ExternalDataUtil.LOGGER_NAME, e.getMessage(), e);

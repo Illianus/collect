@@ -59,7 +59,7 @@ public final class ActivityLogger {
     private static final String DEVICEID = "device_id";
     private static final String CLASS = "class";
     private static final String CONTEXT = "context";
-    private static final String ACTION = "action";
+    private static final String ACTION = "`action`";
     private static final String INSTANCE_PATH = "instance_path";
     private static final String QUESTION = "question";
     private static final String PARAM1 = "param1";

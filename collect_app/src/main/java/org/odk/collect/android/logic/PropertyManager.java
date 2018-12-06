@@ -16,12 +16,10 @@ package org.odk.collect.android.logic;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -29,6 +27,7 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Used to return device properties to JavaRosa
@@ -64,60 +63,13 @@ public class PropertyManager implements IPropertyManager {
         mProperties = new HashMap<String, String>();
         mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
 
-        String deviceId = mTelephonyManager.getDeviceId();
-        String orDeviceId = null;
-        if (deviceId != null) {
-            if ((deviceId.contains("*") || deviceId.contains("000000000000000"))) {
-                deviceId =
-                        Settings.Secure
-                                .getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
-                orDeviceId = Settings.Secure.ANDROID_ID + ":" + deviceId;
-            } else {
-                orDeviceId = "imei:" + deviceId;
-            }
-        }
-
-        if (deviceId == null) {
-            // no SIM -- WiFi only
-            // Retrieve WiFiManager
-            WifiManager wifi = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
-
-            // Get WiFi status
-            WifiInfo info = wifi.getConnectionInfo();
-            if (info != null) {
-                deviceId = info.getMacAddress();
-                orDeviceId = "mac:" + deviceId;
-            }
-        }
-
-        // if it is still null, use ANDROID_ID
-        if (deviceId == null) {
-            deviceId =
-                    Settings.Secure
-                            .getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
-            orDeviceId = Settings.Secure.ANDROID_ID + ":" + deviceId;
-        }
+        String deviceId = UUID.randomUUID().toString();
+        String orDeviceId=UUID.randomUUID().toString();
 
         mProperties.put(DEVICE_ID_PROPERTY, deviceId);
         mProperties.put(OR_DEVICE_ID_PROPERTY, orDeviceId);
 
         String value;
-
-        value = mTelephonyManager.getSubscriberId();
-        if (value != null) {
-            mProperties.put(SUBSCRIBER_ID_PROPERTY, value);
-            mProperties.put(OR_SUBSCRIBER_ID_PROPERTY, "imsi:" + value);
-        }
-        value = mTelephonyManager.getSimSerialNumber();
-        if (value != null) {
-            mProperties.put(SIM_SERIAL_PROPERTY, value);
-            mProperties.put(OR_SIM_SERIAL_PROPERTY, "simserial:" + value);
-        }
-        value = mTelephonyManager.getLine1Number();
-        if (value != null) {
-            mProperties.put(PHONE_NUMBER_PROPERTY, value);
-            mProperties.put(OR_PHONE_NUMBER_PROPERTY, "tel:" + value);
-        }
 
         // Get the username from the settings
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
