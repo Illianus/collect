@@ -16,7 +16,7 @@
  * the License.
  */
 
-package org.odk.collect.android.external;
+package uk.co.biorisk.collect.external;
 
 import org.javarosa.core.model.SelectChoice;
 

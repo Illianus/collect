@@ -12,10 +12,10 @@
  * the License.
  */
 
-package org.odk.collect.android.utilities;
+package uk.co.biorisk.collect.utilities;
 
 import android.util.Log;
-import org.odk.collect.android.application.Collect;
+import uk.co.biorisk.collect.application.Collect;
 
 import java.io.*;
 
