@@ -10,7 +10,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.odk.collect.android">
+    package="uk.co.biorisk.collect">
 
     <uses-feature
             android:name="android.hardware.location"
@@ -53,8 +53,6 @@
     <uses-permission android:name="org.odk.collect.android.permission.MAPS_RECEIVE"/>
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
 
-    <uses-sdk />
-
     <supports-screens
             android:anyDensity="true"
             android:xlargeScreens="true"
@@ -64,7 +62,7 @@
             android:smallScreens="true"/>
 
     <application
-            android:name="org.odk.collect.android.application.Collect"
+            android:name=".application.Collect"
             android:supportsRtl="true"
             android:largeHeap="true"
             android:installLocation="auto"
@@ -73,13 +71,14 @@
             android:theme="@style/Collect">
 
         <provider
-                android:exported="true"
-                android:name="org.odk.collect.android.provider.FormsProvider"
-                android:authorities="org.odk.collect.android.provider.odk.forms"/>
+            android:exported="true"
+            android:authorities="uk.co.biorisk.collect.provider.instances"
+            android:name=".provider.InstanceProvider" />
+
         <provider
                 android:exported="true"
-                android:name="org.odk.collect.android.provider.InstanceProvider"
-                android:authorities="org.odk.collect.android.provider.odk.instances"/>
+                android:name=".provider.FormsProvider"
+                android:authorities="uk.co.biorisk.collect.provider.forms"/>
 
         <activity
                 android:name=".activities.MainMenuActivity"
